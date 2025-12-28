@@ -8,7 +8,6 @@ import com.example.hotel.repository.RoomRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/bookings")
@@ -26,16 +25,29 @@ public class BookingController {
     @PostMapping
     public Booking createBooking(@RequestBody Booking booking) {
 
-        // Ensure room exists before booking
-        Optional<Room> room = roomRepo.findById(booking.getRoom().getId());
+    Long roomId = booking.getRoom().getId();
 
-        if (room.isEmpty()) {
-            throw new RuntimeException("Room not found with ID: " + booking.getRoom().getId());
-        }
+    // 1. Validate room exists
+    Room room = roomRepo.findById(roomId)
+            .orElseThrow(() -> new RuntimeException("Room not found with ID: " + roomId));
 
-        booking.setRoom(room.get());
-        return bookingRepo.save(booking);
+    // 2. Check if room already booked for given dates
+    boolean isBooked = bookingRepo.existsByRoomIdAndCheckOutAfterAndCheckInBefore(
+            roomId,
+            booking.getCheckIn(),
+            booking.getCheckOut()
+    );
+
+    if (isBooked) {
+        throw new IllegalArgumentException(
+                "Room is already booked for the selected dates"
+        );
     }
+
+    // 3. Save booking
+    booking.setRoom(room);
+    return bookingRepo.save(booking);
+   }
 
     // List all bookings
     @GetMapping
