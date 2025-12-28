@@ -1,0 +1,5 @@
+# Ignore everything in target
+target/*
+
+# But include the final JAR
+!target/*.jar
