@@ -41,3 +41,13 @@ curl -X POST http://localhost:8080/bookings \
 
 list all bookings
 curl http://localhost:8080/bookings
+
+###################################################
+docker notes
+###################################################
+docker run --name mysql-container \
+  -e MYSQL_ROOT_PASSWORD=admin123 \
+  -p 3306:3306 \
+  -d mysql:8.0
+
+

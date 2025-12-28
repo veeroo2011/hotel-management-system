@@ -47,3 +47,21 @@ function checkAvailability() {
             });
         });
 }
+
+// Room booking
+function bookRoom() {
+    fetch(`${BASE_URL}/bookings`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            customerName: document.getElementById("customerName").value,
+            checkIn: document.getElementById("bookCheckIn").value,
+            checkOut: document.getElementById("bookCheckOut").value,
+            room: { id: document.getElementById("bookRoomId").value}
+        })
+    })
+    .then(res => {
+        if (res.ok) alert("Room Booked Successfully");
+        else alert("Room already booked!");
+    });
+}

@@ -31,12 +31,24 @@
 <!-- Check Available Rooms -->
 <section>
     <h2>Check Available Rooms</h2>
+    <h4>Hotel</h4>
     <input id="checkHotelId" placeholder="Hotel ID">
-    <input id="checkIn" placeholder="Check-in (YYYY-MM-DD)">
-    <input id="checkOut" placeholder="Check-out (YYYY-MM-DD)">
+    <input id="checkIn" type="date" placeholder="Check-in (YYYY-MM-DD)">
+    <input id="checkOut" type="date" placeholder="Check-out (YYYY-MM-DD)">
     <button onclick="checkAvailability()">Check</button>
 
     <ul id="roomList"></ul>
+</section>
+
+
+<section>
+<!-- Book Room -->
+<h2>Book Room</h2>
+<input id="bookRoomId" placeholder="Room ID">
+<input id="customerName" placeholder="Customer Name">
+<input id="bookCheckIn" type="date">
+<input id="bookCheckOut" type="date">
+<button onclick="bookRoom()">Book Room</button>
 </section>
 
 <script src="js/app.js"></script>
