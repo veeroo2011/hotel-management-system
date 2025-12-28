@@ -1,1 +1,2 @@
+# provide the file or directory which should be ignored while pushing changes to remote repo
 target/
