@@ -1,0 +1,39 @@
+version: "3.8" # docker compose V2 do not need to version it automatically detect so can be removed
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: apppass
+      MYSQL_ROOT_PASSWORD: admin123
+      MYSQL_DATABASE: hoteldb
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  app:
+    image: veeroo2011/hotel-mgmt:1.10
+    container_name: java-app1
+    restart: on-failure
+    environment:
+      DB_URL: "jdbc:mysql://mysql:3306/hoteldb?useSSL=false&allowPublicKeyRetrieval=true"
+      DB_USER: appuser
+      DB_PASSWORD: apppass
+      APP_PORT: 8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+   mysql-data:
