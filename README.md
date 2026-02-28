@@ -1,6 +1,73 @@
+step to install java and maven on windows 10
+
+install java termux 17
+winget install --id EclipseAdoptium.Temurin.17.JDK -e
+
+install choco on windows on powershell admin
+
+Set-ExecutionPolicy Bypass -Scope Process -Force; `
+[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; `
+iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+insall maven
+choco install maven -y
+
+mkdir project/hotel-booking && cd project/hotel-booking
+create pom.xml
+
+directorty struecture
+hotel-booking/
+ ├── pom.xml
+ ├── src/main/java/com/example/hotel/
+ │     ├── HotelBookingApplication.java
+ │     ├── model/
+ │     │     ├── Hotel.java
+ │     │     ├── Room.java
+ │     │     └── Booking.java
+ │     ├── repository/
+ │     │     ├── HotelRepository.java
+ │     │     ├── RoomRepository.java
+ │     │     └── BookingRepository.java
+ │     └── controller/
+ │           ├── HotelController.java
+ │           ├── RoomController.java
+ │           └── BookingController.java
+ ├── src/main/resources/
+ │     └── application.properties
+ └── Dockerfile
+
+# DATABASE DETAILS
+installed mysql at port 3306
+user root admin123
+user abku800 admin123
+SHOW DATABASES;
+CREATE DATABASE hoteldb;
+
+# BUILD JAR FILE
+mvn clean package -DskipTests ==> build jar file
+java -jar target/hotel-booking-0.0.1-SNAPSHOT.jar ==> run java application
+
+# BUILD DOCKER IMAGE
+docker build -t veeroo2011/hotel-mgmt:1.0
+
+# push docker image to ECR
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 997554581092.dkr.ecr.us-east-1.amazonaws.com
+docker tag veeroo2011/hotel-mgmt:1.0 997554581092.dkr.ecr.us-east-1.amazonaws.com/hotel-mgmt:1.0
+docker push 997554581092.dkr.ecr.us-east-1.amazonaws.com/hotel-mgmt:1.0
+
+ # steps to run this application in local machine 
+ docker network create -d bridge mynet
+ docker run --net mynet --name mysql-container   -e MYSQL_ROOT_PASSWORD=admin123   -p 3306:3306   -d mysql:8.0
+ docker exec -it mysql-container mysql -u root -p #provide password as admin123  "CREATE DATABASE hoteldb;"
+ docker run -itd  --net mynet  -e DB_URL="jdbc:mysql://mysql-container:3306/hoteldb?useSSL=false&allowPublicKeyRetrieval=true"  -e DB_USER=root  -e DB_PASSWORD=admin123  -e APP_PORT=8080  --name java-app  -p 8080:8080  veeroo2011/hotel-mgmt:1.10
+
+ec2 must have permission to upload image to ecr and need to attach iam role AmazonEC2ContainerRegistryFullAccess name as ecraccessrole
+
 ####################################################
 # api details
 ####################################################
+# Using the curl command will create a hotel record in your MySQL database of hoteldb.
+
 create hotel 
 curl -X POST http://localhost:8080/hotels \
  -H "Content-Type: application/json" \
@@ -48,14 +115,11 @@ curl http://localhost:8080/bookings
 ###################################################
 # database validation                             #
 ###################################################
-
-
-
 SHOW DATABASES;
 CREATE DATABASE hoteldb;
 
 
-Validate Database
+# Validate Database
 check database
 use hoteldb;
 SELECT * FROM hotel;
@@ -63,7 +127,6 @@ SELECT * FROM room;
 SELECT * FROM booking;
 delete from hotel where id in (1,2);
 
-run mysql-container and set root password as admin123
 ######################################################
 # run mysql and java-app in same network             #
 ######################################################
