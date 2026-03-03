@@ -232,3 +232,8 @@ docker run -itd \
  veeroo2011/hotel-mgmt:1.8
 
 docker-compose will work for image version 1.10
+
+Infrastructure details
+vpc cidr 192.168.0.0/16
+public-subnet 192.168.10.0/24 & 192.168.20.0/24 us-east-1a and us-east-1c
+private-subnet 192.168.30.0/24 & 192.168.40.0/24 us-east-1b and us-east-1d
