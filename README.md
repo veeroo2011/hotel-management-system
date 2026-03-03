@@ -12,6 +12,9 @@ iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocola
 insall maven
 choco install maven -y
 
+================ Installation at Mac =============
+brew install awscli maven 
+
 mkdir project/hotel-booking && cd project/hotel-booking
 create pom.xml
 
@@ -48,7 +51,8 @@ mvn clean package -DskipTests ==> build jar file
 java -jar target/hotel-booking-0.0.1-SNAPSHOT.jar ==> run java application
 
 # BUILD DOCKER IMAGE
-docker build -t veeroo2011/hotel-mgmt:1.0
+docker build -t veeroo2011/hotel-mgmt:1.0 from linux machine
+docker build --platform linux/amd64 -t veeroo2011/hotel-mgmt:1.1 .  from mac os 
 
 # push docker image to ECR
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 997554581092.dkr.ecr.us-east-1.amazonaws.com

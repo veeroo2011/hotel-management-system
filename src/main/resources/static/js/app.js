@@ -1,4 +1,5 @@
-const BASE_URL = "http://stay.hotel.com:8080";
+//const BASE_URL = "http://stay.hotel.com:8080";
+const BASE_URL = window.location.origin;
 
 // Create Hotel
 function createHotel() {
