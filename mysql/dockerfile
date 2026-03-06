@@ -1,0 +1,7 @@
+FROM mysql:8.0
+
+# Ser root password for MySQL
+ENV MYSQL_ROOT_PASSWORD=admin123
+
+#mysql will automatically create a database with the name specified in MYSQL_DATABASE environment variable when the container is first run
+ENV MYSQL_DATABASE=hoteldb
